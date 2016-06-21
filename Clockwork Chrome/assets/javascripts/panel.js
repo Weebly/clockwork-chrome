@@ -16,6 +16,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 	$scope.activeTimeline = [];
 	$scope.activeTimelineLegend = [];
 	$scope.activeViews = [];
+	$scope.activeFilesystemData = [];
 	$scope.activeNetworkData = [];
 
 	$scope.showIncomingRequests = true;
@@ -122,6 +123,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		data.sessionData = $scope.createKeypairs(data.sessionData);
 		data.timeline = $scope.processTimeline(data);
 		data.views = $scope.processViews(data.viewsData);
+		data.filesystemData = $scope.createKeypairs(data.filesystemData);
 		data.networkData = $scope.createKeypairs(data.networkData);
 
 		data.errorsCount = $scope.getErrorsCount(data);
@@ -152,6 +154,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		$scope.activeTimeline = [];
 		$scope.activeTimelineLegend = [];
 		$scope.activeViews = [];
+		$scope.activeFilesystemData = [];
 		$scope.activeNetworkData = [];
 
 		$scope.showIncomingRequests = true;
@@ -174,6 +177,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		$scope.activeTimeline = $scope.requests[requestId].timeline;
 		$scope.activeTimelineLegend = $scope.generateTimelineLegend();
 		$scope.activeViews = $scope.requests[requestId].views;
+		$scope.activeFilesystemData = $scope.requests[requestId].filesystemData;
 		$scope.activeNetworkData = $scope.requests[requestId].networkData;
 
 		var lastRequestId = Object.keys($scope.requests)[Object.keys($scope.requests).length - 1];

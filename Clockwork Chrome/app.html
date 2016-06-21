@@ -106,6 +106,9 @@
 								<li tab-name="cookies" class="tabbed-pane-header-tab" ng-show="activeCookies.length">
 									<a href="#" class="tabbed-pane-header-tab-title">Cookies</a>
 								</li>
+								<li tab-name="files" class="tabbed-pane-header-tab" ng-show="activeFilesystemData.length">
+									<a href="#" class="tabbed-pane-header-tab-title">Filesystem</a>
+								</li>
 								<li tab-name="network" class="tabbed-pane-header-tab" ng-show="activeNetworkData.length">
 									<a href="#" class="tabbed-pane-header-tab-title">Network</a>
 								</li>
@@ -283,6 +286,22 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="param in activeCookies">
+										<td class="key">{{param.name}}</td>
+										<td><pretty-print data="param.value"></pretty-print></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div tab-content="files">
+							<table id="filesystemData">
+								<thead>
+									<tr>
+										<th colspan="2">Filesystem</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="param in activeFilesystemData">
 										<td class="key">{{param.name}}</td>
 										<td><pretty-print data="param.value"></pretty-print></td>
 									</tr>
