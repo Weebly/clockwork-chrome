@@ -181,6 +181,7 @@
 									<tr>
 										<th data-sort="string">Model</th>
 										<th data-sort="string" ng-show="showDatabaseConnectionColumn()">Connection</th>
+										<th data-sort="string">Count</th>
 										<th data-sort="string">SQL</th>
 										<th data-sort="float" class="duration">Duration</th>
 									</tr>
@@ -191,6 +192,7 @@
 											<div shortened-text="{{query.model}}">{{query.shortModel}}</div>
 										</td>
 										<td ng-show="showDatabaseConnectionColumn()">{{query.connection}}</td>
+										<td>{{query.count}}</td>
 										<td>
 											<div class="database-query">
 												<div class="database-query-content">{{query.query}}</div>

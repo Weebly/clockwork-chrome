@@ -114,7 +114,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		data.databaseDurationRounded = data.databaseDuration ? Math.round(data.databaseDuration) : 0;
 
 		data.cookies = $scope.createKeypairs(data.cookies);
-		data.databaseQueries = $scope.processDatabaseQueries(data.databaseQueries);
+		data.databaseQueries = $scope.processCoalesceDatabaseQueries(data.databaseQueries);
 		data.emails = $scope.processEmails(data.emailsData);
 		data.getData = $scope.createKeypairs(data.getData);
 		data.headers = $scope.processHeaders(data.headers);
@@ -260,6 +260,41 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		});
 
 		return data;
+	};
+
+	$scope.processCoalesceDatabaseQueries = function(data)
+	{
+		if (!(data instanceof Object)) {
+			return [];
+		}
+
+		var ret = {};
+		$.each(data, function (key, value){
+			value.model = value.model || '-';
+			value.shortModel = value.model ? value.model.split('\\').pop() : '-';
+			value.fullPath = value.file && value.line ? value.file.replace(/^\//, '') + ':' + value.line : undefined;
+			value.shortPath = value.fullPath ? value.fullPath.split(/[\/\\]/).pop() : undefined;
+
+				if(!ret[value.query]) {
+					value.count = 0;
+					ret[value.query]  = value;
+				}
+
+				ret[value.query].count += 1;
+				ret[value.query].duration += value.duration;
+		});
+
+
+		var things = [];
+		for (var key in ret) {
+ 			if (!ret.hasOwnProperty(key)) {
+				continue;
+			}
+
+			things.push(ret[key]);
+		}
+
+		return things;
 	};
 
 	$scope.processEmails = function(data)
