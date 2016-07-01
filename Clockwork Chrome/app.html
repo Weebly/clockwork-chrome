@@ -124,6 +124,10 @@
 								<li tab-name="routes" class="tabbed-pane-header-tab" ng-show="activeRoutes.length">
 									<a href="#" class="tabbed-pane-header-tab-title">Routes</a>
 								</li>
+
+								<li ng-repeat="param in activeDynamicData" tab-name="{{param.label}}" class="tabbed-pane-header-tab">
+									<a href="#" class="tabbed-pane-header-tab-title">{{param.label}}</a>
+								</li>
 							</ul>
 						</div>
 
@@ -256,6 +260,22 @@
 										</td>
 										<td class="timeline-duration">{{item.durationRounded}} ms</td>
 										<td class="timeline-description">{{item.description}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div ng-repeat="param in activeDynamicData" tab-content="{{param.label}}">
+							<table id="{{param.labelData}}">
+								<thead>
+									<tr>
+										<th colspan="2">{{param.label}}</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="data in param.data">
+										<td class="key">{{data.key}}</td>
+										<td><pretty-print data="data.value"></pretty-print></td>
 									</tr>
 								</tbody>
 							</table>
