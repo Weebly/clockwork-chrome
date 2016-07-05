@@ -1,7 +1,7 @@
 Clockwork.directive('tabs', function ($parse) {
 	return {
 		link: function (scope, element, attrs) {
-			$(element).find('[tab-name]').on('click', function()
+			$(element).on('click', '[tab-name]', function()
 			{
 				var tabs = $(this).parents('[tabs]');
 				var tabName = $(this).attr('tab-name');
