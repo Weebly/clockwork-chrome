@@ -19,6 +19,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 	$scope.activeFilesystemData = [];
 	$scope.activeNetworkData = [];
 	$scope.activeCacheData = [];
+	$scope.activeDynamicData = [];
 
 	$scope.showIncomingRequests = true;
 
@@ -109,13 +110,16 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		$('.toolbar').replaceWith(toolbar.render());
 	};
 
+$scope.figureOutData = function(data){
+	return data;
+}
 	$scope.addRequest = function(requestId, data)
 	{
 		data.responseDurationRounded = data.responseDuration ? Math.round(data.responseDuration) : 0;
 		data.databaseDurationRounded = data.databaseDuration ? Math.round(data.databaseDuration) : 0;
 
 		data.cookies = $scope.createKeypairs(data.cookies);
-		data.databaseQueries = $scope.processDatabaseQueries(data.databaseQueries);
+		data.databaseQueries = $scope.processCoalesceDatabaseQueries(data.databaseQueries);
 		data.emails = $scope.processEmails(data.emailsData);
 		data.getData = $scope.createKeypairs(data.getData);
 		data.headers = $scope.processHeaders(data.headers);
@@ -127,6 +131,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		data.filesystemData = $scope.createKeypairs(data.filesystemData);
 		data.networkData = $scope.createKeypairs(data.networkData);
 		data.cacheData = $scope.createKeypairs(data.cacheData);
+		data.dynamicData = $scope.figureOutData(data.dynamicData);
 
 		data.errorsCount = $scope.getErrorsCount(data);
 		data.warningsCount = $scope.getWarningsCount(data);
@@ -159,6 +164,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		$scope.activeFilesystemData = [];
 		$scope.activeNetworkData = [];
 		$scope.activeCacheData = [];
+		$scope.activeDynamicData = [];
 
 		$scope.showIncomingRequests = true;
 	};
@@ -183,6 +189,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		$scope.activeFilesystemData = $scope.requests[requestId].filesystemData;
 		$scope.activeNetworkData = $scope.requests[requestId].networkData;
 		$scope.activeCacheData = $scope.requests[requestId].cacheData;
+		$scope.activeDynamicData = $scope.requests[requestId].dynamicData;
 
 		var lastRequestId = Object.keys($scope.requests)[Object.keys($scope.requests).length - 1];
 
@@ -264,6 +271,41 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 		});
 
 		return data;
+	};
+
+	$scope.processCoalesceDatabaseQueries = function(data)
+	{
+		if (!(data instanceof Object)) {
+			return [];
+		}
+
+		var ret = {};
+		$.each(data, function (key, value){
+			value.model = value.model || '-';
+			value.shortModel = value.model ? value.model.split('\\').pop() : '-';
+			value.fullPath = value.file && value.line ? value.file.replace(/^\//, '') + ':' + value.line : undefined;
+			value.shortPath = value.fullPath ? value.fullPath.split(/[\/\\]/).pop() : undefined;
+
+				if(!ret[value.query]) {
+					value.count = 0;
+					ret[value.query]  = value;
+				}
+
+				ret[value.query].count += 1;
+				ret[value.query].duration += value.duration;
+		});
+
+
+		var things = [];
+		for (var key in ret) {
+ 			if (!ret.hasOwnProperty(key)) {
+				continue;
+			}
+
+			things.push(ret[key]);
+		}
+
+		return things;
 	};
 
 	$scope.processEmails = function(data)
