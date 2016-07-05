@@ -18,6 +18,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 	$scope.activeViews = [];
 	$scope.activeFilesystemData = [];
 	$scope.activeNetworkData = [];
+	$scope.activeCacheData = [];
 	$scope.activeDynamicData = [];
 
 	$scope.showIncomingRequests = true;
@@ -129,6 +130,7 @@ $scope.figureOutData = function(data){
 		data.views = $scope.processViews(data.viewsData);
 		data.filesystemData = $scope.createKeypairs(data.filesystemData);
 		data.networkData = $scope.createKeypairs(data.networkData);
+		data.cacheData = $scope.createKeypairs(data.cacheData);
 		data.dynamicData = $scope.figureOutData(data.dynamicData);
 
 		data.errorsCount = $scope.getErrorsCount(data);
@@ -161,6 +163,7 @@ $scope.figureOutData = function(data){
 		$scope.activeViews = [];
 		$scope.activeFilesystemData = [];
 		$scope.activeNetworkData = [];
+		$scope.activeCacheData = [];
 		$scope.activeDynamicData = [];
 
 		$scope.showIncomingRequests = true;
@@ -185,6 +188,7 @@ $scope.figureOutData = function(data){
 		$scope.activeViews = $scope.requests[requestId].views;
 		$scope.activeFilesystemData = $scope.requests[requestId].filesystemData;
 		$scope.activeNetworkData = $scope.requests[requestId].networkData;
+		$scope.activeCacheData = $scope.requests[requestId].cacheData;
 		$scope.activeDynamicData = $scope.requests[requestId].dynamicData;
 
 		var lastRequestId = Object.keys($scope.requests)[Object.keys($scope.requests).length - 1];
