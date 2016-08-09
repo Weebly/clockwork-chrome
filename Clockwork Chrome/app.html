@@ -338,13 +338,14 @@
 							<table id="cacheData">
 								<thead>
 									<tr>
-										<th colspan="2">Cache</th>
+										<th colspan="3">Cache</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr ng-repeat="param in activeCacheData">
-										<td class="key">{{param.name}}</td>
-										<td><pretty-print data="param.value"></pretty-print></td>
+										<td>{{param.cache}}</td>
+										<td class="key">{{param.key}}</td>
+										<td><pretty-print data="param.duration"></pretty-print></td>
 									</tr>
 								</tbody>
 							</table>

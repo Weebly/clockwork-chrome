@@ -130,7 +130,7 @@ $scope.figureOutData = function(data){
 		data.views = $scope.processViews(data.viewsData);
 		data.filesystemData = $scope.createKeypairs(data.filesystemData);
 		data.networkData = $scope.createKeypairs(data.networkData);
-		data.cacheData = $scope.createKeypairs(data.cacheData);
+		data.cacheData = data.cacheData;
 		data.dynamicData = $scope.figureOutData(data.dynamicData);
 
 		data.errorsCount = $scope.getErrorsCount(data);
