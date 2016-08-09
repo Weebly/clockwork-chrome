@@ -202,7 +202,10 @@
 										<td>{{query.count}}</td>
 										<td>
 											<div class="database-query">
-												<div class="database-query-content">{{query.query}}</div>
+												<div class="database-query-content">
+													{{query.name}}
+													<pretty-print data="query.params"></pretty-print>
+												</div>
 												<div class="database-query-path">
 													<div shortened-text="{{query.fullPath}}">{{query.shortPath}}</div>
 												</div>
@@ -212,7 +215,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<div class="number-of-queries">Number of queries: {{activeTotalQueries.length}}</div>
+							<div class="number-of-queries">Number of queries: {{activeTotalDatabaseCount}}</div>
 						</div>
 
 						<div tab-content="log">

@@ -20,7 +20,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 	$scope.activeNetworkData = [];
 	$scope.activeCacheData = [];
 	$scope.activeDynamicData = [];
-	$scope.activeTotalQueries = [];
+	$scope.activeTotalDatabaseCount = 0;
 
 	$scope.showIncomingRequests = true;
 
@@ -120,9 +120,7 @@ $scope.figureOutData = function(data){
 		data.databaseDurationRounded = data.databaseDuration ? Math.round(data.databaseDuration) : 0;
 
 		data.cookies = $scope.createKeypairs(data.cookies);
-		var qq = data.databaseQueries;
-		data.totalQueries = $scope.processDatabaseQueries(qq);
-		data.databaseQueries = $scope.processCoalesceDatabaseQueries(data.databaseQueries);
+		data.databaseQueries = $scope.processCoalesceDatabaseQueries($scope.createKeypairs(data.databaseQueries));
 		data.emails = $scope.processEmails(data.emailsData);
 		data.getData = $scope.createKeypairs(data.getData);
 		data.headers = $scope.processHeaders(data.headers);
@@ -169,6 +167,7 @@ $scope.figureOutData = function(data){
 		$scope.activeNetworkData = [];
 		$scope.activeCacheData = [];
 		$scope.activeDynamicData = [];
+		$scope.activeTotalDatabaseCount = 0;
 
 		$scope.showIncomingRequests = true;
 	};
@@ -286,18 +285,34 @@ $scope.figureOutData = function(data){
 
 		var ret = {};
 		$.each(data, function (key, value){
-			value.model = value.model || '-';
-			value.shortModel = value.model ? value.model.split('\\').pop() : '-';
-			value.fullPath = value.file && value.line ? value.file.replace(/^\//, '') + ':' + value.line : undefined;
-			value.shortPath = value.fullPath ? value.fullPath.split(/[\/\\]/).pop() : undefined;
+			value.query = value.value;
+			var query = value.value;
+			var sql = value.name;
 
-				if(!ret[value.query]) {
+
+			var firstQuery = query[0];
+			value.model = firstQuery.model || '-';
+			value.shortModel = firstQuery.model ? firstQuery.model.split('\\').pop() : '-';
+			value.fullPath = firstQuery.file && firstQuery.line ? firstQuery.file.replace(/^\//, '') + ':' + firstQuery.line : undefined;
+			value.shortPath = firstQuery.fullPath ? firstQuery.fullPath.split(/[\/\\]/).pop() : undefined;
+
+				if(!ret[sql]) {
 					value.count = 0;
-					ret[value.query]  = value;
+					ret[sql] = value;
+					ret[sql].duration = 0;
 				}
 
-				ret[value.query].count += 1;
-				ret[value.query].duration += value.duration;
+				var params = [];
+				$.each(query, function (key, value){
+						params.push(value.bindings);
+
+						ret[sql].count += 1;
+						ret[sql].duration += value.duration;
+				});
+
+				ret[sql].params = params;
+
+				$scope.activeTotalDatabaseCount += ret[sql].count;
 		});
 
 
