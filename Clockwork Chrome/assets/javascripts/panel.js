@@ -131,7 +131,7 @@ $scope.figureOutData = function(data){
 		data.views = $scope.processViews(data.viewsData);
 		data.filesystemData = $scope.createKeypairs(data.filesystemData);
 		data.networkData = $scope.createKeypairs(data.networkData);
-		data.cacheData = $scope.createKeypairs(data.cacheData);
+		data.cacheData = data.cacheData;
 		data.dynamicData = $scope.figureOutData(data.dynamicData);
 
 		data.errorsCount = $scope.getErrorsCount(data);
@@ -151,6 +151,7 @@ $scope.figureOutData = function(data){
 
 		$scope.activeCookies = [];
 		$scope.activeDatabaseQueries = [];
+		$scope.activeTotalQueries = [];
 		$scope.activeEmails = [];
 		$scope.activeGetData = [];
 		$scope.activeHeaders = [];
@@ -177,6 +178,7 @@ $scope.figureOutData = function(data){
 
 		$scope.activeCookies = $scope.requests[requestId].cookies;
 		$scope.activeDatabaseQueries = $scope.requests[requestId].databaseQueries;
+		$scope.activeTotalQueries = $scope.requests[requestId].totalQueries;
 		$scope.activeEmails = $scope.requests[requestId].emails;
 		$scope.activeGetData = $scope.requests[requestId].getData;
 		$scope.activeHeaders = $scope.requests[requestId].headers;
