@@ -308,6 +308,7 @@ $scope.figureOutData = function(data){
 
 						ret[sql].count += 1;
 						ret[sql].duration += value.duration;
+						ret[sql].connection = value.connection;
 				});
 
 				ret[sql].params = params;
