@@ -20,6 +20,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 	$scope.activeNetworkData = [];
 	$scope.activeCacheData = [];
 	$scope.activeDynamicData = [];
+	$scope.activeTotalQueries = [];
 
 	$scope.showIncomingRequests = true;
 
@@ -119,6 +120,8 @@ $scope.figureOutData = function(data){
 		data.databaseDurationRounded = data.databaseDuration ? Math.round(data.databaseDuration) : 0;
 
 		data.cookies = $scope.createKeypairs(data.cookies);
+		var qq = data.databaseQueries;
+		data.totalQueries = $scope.processDatabaseQueries(qq);
 		data.databaseQueries = $scope.processCoalesceDatabaseQueries(data.databaseQueries);
 		data.emails = $scope.processEmails(data.emailsData);
 		data.getData = $scope.createKeypairs(data.getData);
@@ -150,6 +153,7 @@ $scope.figureOutData = function(data){
 
 		$scope.activeCookies = [];
 		$scope.activeDatabaseQueries = [];
+		$scope.activeTotalQueries = [];
 		$scope.activeEmails = [];
 		$scope.activeGetData = [];
 		$scope.activeHeaders = [];
@@ -175,6 +179,7 @@ $scope.figureOutData = function(data){
 
 		$scope.activeCookies = $scope.requests[requestId].cookies;
 		$scope.activeDatabaseQueries = $scope.requests[requestId].databaseQueries;
+		$scope.activeTotalQueries = $scope.requests[requestId].totalQueries;
 		$scope.activeEmails = $scope.requests[requestId].emails;
 		$scope.activeGetData = $scope.requests[requestId].getData;
 		$scope.activeHeaders = $scope.requests[requestId].headers;
