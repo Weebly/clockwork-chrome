@@ -121,6 +121,7 @@ $scope.figureOutData = function(data){
 
 		data.cookies = $scope.createKeypairs(data.cookies);
 		data.databaseQueries = $scope.processCoalesceDatabaseQueries($scope.createKeypairs(data.databaseQueries));
+		data.totalQueries = $scope.activeTotalDatabaseCount;
 		data.emails = $scope.processEmails(data.emailsData);
 		data.getData = $scope.createKeypairs(data.getData);
 		data.headers = $scope.processHeaders(data.headers);
@@ -151,7 +152,6 @@ $scope.figureOutData = function(data){
 
 		$scope.activeCookies = [];
 		$scope.activeDatabaseQueries = [];
-		$scope.activeTotalQueries = [];
 		$scope.activeEmails = [];
 		$scope.activeGetData = [];
 		$scope.activeHeaders = [];
@@ -178,7 +178,7 @@ $scope.figureOutData = function(data){
 
 		$scope.activeCookies = $scope.requests[requestId].cookies;
 		$scope.activeDatabaseQueries = $scope.requests[requestId].databaseQueries;
-		$scope.activeTotalQueries = $scope.requests[requestId].totalQueries;
+		$scope.activeTotalDatabaseCount = $scope.requests[requestId].totalQueries;
 		$scope.activeEmails = $scope.requests[requestId].emails;
 		$scope.activeGetData = $scope.requests[requestId].getData;
 		$scope.activeHeaders = $scope.requests[requestId].headers;
@@ -282,6 +282,8 @@ $scope.figureOutData = function(data){
 		if (!(data instanceof Object)) {
 			return [];
 		}
+
+		$scope.activeTotalDatabaseCount = 0;
 
 		var ret = {};
 		$.each(data, function (key, value){
