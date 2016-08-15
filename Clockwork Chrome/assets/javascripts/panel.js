@@ -315,6 +315,14 @@ $scope.figureOutData = function(data){
 
 				ret[sql].params = params;
 
+				var hash = {};
+				$.each(params, function(key, value){ // each time the query was run
+						var values = [];
+						$.each(value, function(nothing, needed){ values.push(needed); });
+						hash[values.join()] = true;
+				});
+
+				ret[sql].duplication = Math.floor(100 * (1 - (Object.keys(hash).length / ret[sql].params.length)));
 				$scope.activeTotalDatabaseCount += ret[sql].count;
 		});
 
