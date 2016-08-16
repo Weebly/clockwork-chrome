@@ -226,6 +226,7 @@
 									<tr>
 										<th data-sort="string">Time</th>
 										<th data-sort="string">Level</th>
+										<th data-sort="string">Channel</th>
 										<th data-sort="string">Message</th>
 									</tr>
 								</thead>
@@ -233,6 +234,7 @@
 									<tr ng-repeat="message in activeLog">
 										<td class="log-date">{{message.time | date:'HH:mm:ss'}}</td>
 										<td class="log-level">{{message.level}}</td>
+										<td class="log-level">{{message.channel}}</td>
 										<td>
 											<div class="log-message">
 												<div class="log-message-content">
