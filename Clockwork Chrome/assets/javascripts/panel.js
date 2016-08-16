@@ -322,7 +322,15 @@ $scope.figureOutData = function(data){
 						hash[values.join()] = true;
 				});
 
-				ret[sql].duplication = Math.floor(100 * (1 - (Object.keys(hash).length / ret[sql].params.length)));
+				var unique = Object.keys(hash).length;
+				var total = ret[sql].params.length;
+
+				if (unique === 1 && total > 1) {
+					ret[sql].duplication = 100;
+				} else {
+					ret[sql].duplication = Math.floor(100 * (1 - (unique / total)));
+				}
+
 				$scope.activeTotalDatabaseCount += ret[sql].count;
 		});
 
