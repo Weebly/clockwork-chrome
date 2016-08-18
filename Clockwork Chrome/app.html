@@ -285,9 +285,9 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr ng-repeat="data in param.data">
-										<td class="key">{{data.key}}</td>
-										<td><pretty-print data="data.value"></pretty-print></td>
+									<tr ng-repeat="(key, value) in param.data">
+										<td class="key">{{key}}</td>
+										<td><pretty-print data="value"></pretty-print></td>
 									</tr>
 								</tbody>
 							</table>
