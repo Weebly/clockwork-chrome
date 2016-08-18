@@ -1,5 +1,5 @@
 chrome.devtools.panels.create(
-	"Clockwork",
+	"Clockwork-Orange",
 	"assets/images/icon-toolbar.png",
 	"app.html",
 	function(panel) {}
