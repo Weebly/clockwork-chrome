@@ -368,7 +368,7 @@
 								<tbody>
 									<tr ng-repeat="param in activeNetworkData">
 										<td class="key">{{param.name}}</td>
-										<td><pretty-print data="param.value"></pretty-print></td>
+										<td>{{param.value | number:3}}ms</td>
 									</tr>
 								</tbody>
 							</table>
