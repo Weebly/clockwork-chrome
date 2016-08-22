@@ -306,6 +306,12 @@ $scope.figureOutData = function(data){
 
 				var params = [];
 				$.each(query, function (key, value){
+						value.bindings._meta_ = {
+							file: value.shortPath,
+							model: value.model,
+							duration: value.duration,
+							connection: value.connection
+						};
 						params.push(value.bindings);
 
 						ret[sql].count += 1;
