@@ -59,7 +59,11 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 			});
 
 			if (requestVersion !== undefined) {
-				var uri = new URI(request.request.url);
+				var baseUrl = request.request.url;
+				if ($scope.baseUrl) {
+					baseUrl = $scope.baseUrl
+				}
+				var uri = new URI(baseUrl);
 				var path = ((requestPath) ? requestPath.value : '/__clockwork/') + requestId.value;
 
 				path = path.split('?');
@@ -101,6 +105,41 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 
 	$scope.createToolbar = function()
 	{
+
+
+		toolbar.createTextbox('Base uri', 'base-uri', function(){
+			var url = $(this).val();
+			if (url.substring(0, 4) == "http"){
+				$scope.baseUrl = url;
+			} else {
+				$scope.baseUrl = false;
+			}
+
+		});
+
+		toolbar.createTextbox(' Request id', 'request-id', function(){
+			$scope.requestId = $(this).val();
+		});
+		toolbar.createButton('download', 'Request', function()
+		{
+			var $button = $(this).find('i');
+			$button.toggleClass('fa-download', false);
+			$button.toggleClass('fa-download', false);
+			$button.toggleClass('fa-cog', true);
+			$button.toggleClass('fa-spin', true);
+
+			$scope.$apply(function() {
+				var base = $scope.baseUrl ? $scope.baseUrl : '/';
+
+				$http.get(base + '/__clockwork/' + $scope.requestId).success(function(data){
+					$scope.addRequest($scope.requestId, data);
+				}).finally(function(){
+					$button.toggleClass('fa-download', true)
+					$button.toggleClass('fa-cog', false);
+					$button.toggleClass('fa-spin', false);
+				});
+			});
+		});
 		toolbar.createButton('ban', 'Clear', function()
 		{
 			$scope.$apply(function() {

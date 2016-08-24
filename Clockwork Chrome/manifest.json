@@ -12,7 +12,8 @@
 	"permissions": [
 		"debugger",
 		"http://*/",
-		"https://*/"
+		"https://*/",
+		"*://*/*"
 	],
 	"icons": {
 		 "48": "assets/images/logo-48x48.png",

@@ -4,6 +4,7 @@ Clockwork.factory('toolbar', function()
 return {
 
     buttons: [],
+    textboxes: [],
 
     createButton: function(icon, name, callback)
     {
@@ -14,9 +15,27 @@ return {
         });
     },
 
+    createTextbox: function(label, name, callback)
+    {
+      this.textboxes.push({
+        label: label,
+        name: name,
+        callback: callback
+      })
+    },
+
     render: function()
     {
         var $html = $('<div class="toolbar"></div>');
+
+        $.each(this.textboxes, function(i, text)
+        {
+            var $text = $('<label for="'+text.name+'">'+text.label+'</label>: <input id="'+text.name+'"type="text" />');
+
+            $text.on('blur', text.callback);
+
+            $html.append($text);
+        });
 
         $.each(this.buttons, function(i, button)
         {
@@ -26,6 +45,9 @@ return {
 
             $html.append($button);
         });
+
+
+
 
         return $html;
     }
