@@ -49,6 +49,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 			var requestId = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-id'; });
 			var requestVersion = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-version'; });
             		var requestPath = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-path'; });
+			var requestHostname = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-hostname'});
 
 			var requestHeaders = {};
 			$.each(headers, function(i, header) {
@@ -65,6 +66,10 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 				}
 				var uri = new URI(baseUrl);
 				var path = ((requestPath) ? requestPath.value : '/__clockwork/') + requestId.value;
+
+				if (requestHostname) {
+					uri.hostname(requestHostname.value);
+				}
 
 				path = path.split('?');
 				uri.pathname(path[0]);
