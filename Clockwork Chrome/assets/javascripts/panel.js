@@ -64,6 +64,10 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 					baseUrl = $scope.baseUrl
 				}
 				var uri = new URI(baseUrl);
+
+				uri.subdomain(uri.subdomain().replace(/\.checkout$/, '')); // Handle checkout pages
+				uri.subdomain(uri.subdomain().replace(/^assets-/, '')); // Handle asset loads
+
 				var path = ((requestPath) ? requestPath.value : '/__clockwork/') + requestId.value;
 
 				path = path.split('?');
