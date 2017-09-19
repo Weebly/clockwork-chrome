@@ -48,7 +48,7 @@ Clockwork.controller('PanelController', function($scope, $http, toolbar)
 			var headers = request.response.headers;
 			var requestId = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-id'; });
 			var requestVersion = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-version'; });
-            		var requestPath = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-path'; });
+			var requestPath = headers.find(function(x) { return x.name.toLowerCase() == 'x-clockwork-path'; });
 
 			var requestHeaders = {};
 			$.each(headers, function(i, header) {
@@ -326,10 +326,15 @@ $scope.figureOutData = function(data){
 
 		var ret = {};
 		$.each(data, function (key, value){
-			value.query = value.value;
 			var query = value.value;
-			var sql = value.name;
+			var sql;
 
+			if (query instanceof Array) {
+				value.query = sql = value.name;
+			} else {
+				value.query = sql = query.query;
+				query = [query];
+			}
 
 			var firstQuery = query[0];
 			value.model = firstQuery.model || '-';
@@ -337,46 +342,46 @@ $scope.figureOutData = function(data){
 			value.fullPath = firstQuery.file && firstQuery.line ? firstQuery.file.replace(/^\//, '') + ':' + firstQuery.line : undefined;
 			value.shortPath = firstQuery.fullPath ? firstQuery.fullPath.split(/[\/\\]/).pop() : undefined;
 
-				if(!ret[sql]) {
-					value.count = 0;
-					ret[sql] = value;
-					ret[sql].duration = 0;
-				}
+			if(!ret[sql]) {
+				value.count = 0;
+				ret[sql] = value;
+				ret[sql].duration = 0;
+			}
 
-				var params = [];
-				$.each(query, function (key, value){
-						value.bindings._meta_ = {
-							file: value.shortPath,
-							model: value.model,
-							duration: value.duration,
-							connection: value.connection
-						};
-						params.push(value.bindings);
+			var params = [];
+			$.each(query, function (key, value){
+					value.bindings._meta_ = {
+						file: value.shortPath,
+						model: value.model,
+						duration: value.duration,
+						connection: value.connection
+					};
+					params.push(value.bindings);
 
-						ret[sql].count += 1;
-						ret[sql].duration += value.duration;
-						ret[sql].connection = value.connection;
-				});
+					ret[sql].count += 1;
+					ret[sql].duration += value.duration;
+					ret[sql].connection = value.connection;
+			});
 
-				ret[sql].params = params;
+			ret[sql].params = params;
 
-				var hash = {};
-				$.each(params, function(key, value){ // each time the query was run
-						var values = [];
-						$.each(value, function(nothing, needed){ values.push(needed); });
-						hash[values.join()] = true;
-				});
+			var hash = {};
+			$.each(params, function(key, value){ // each time the query was run
+					var values = [];
+					$.each(value, function(nothing, needed){ values.push(needed); });
+					hash[values.join()] = true;
+			});
 
-				var unique = Object.keys(hash).length;
-				var total = ret[sql].params.length;
+			var unique = Object.keys(hash).length;
+			var total = ret[sql].params.length;
 
-				if (unique === 1 && total > 1) {
-					ret[sql].duplication = 100;
-				} else {
-					ret[sql].duplication = Math.floor(100 * (1 - (unique / total)));
-				}
+			if (unique === 1 && total > 1) {
+				ret[sql].duplication = 100;
+			} else {
+				ret[sql].duplication = Math.floor(100 * (1 - (unique / total)));
+			}
 
-				$scope.activeTotalDatabaseCount += ret[sql].count;
+			$scope.activeTotalDatabaseCount += ret[sql].count;
 		});
 
 
